@@ -52,4 +52,63 @@ public class TransacaoService {
 
         return transacaoRepository.save(novaTransacao);
     }
+
+    @Transactional
+    public Transacao depositar(String cpfCliente, BigDecimal valorRecarga, UUID idOperadorCaixa) {
+        if (valorRecarga.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("O valor de recarga deve ser maior que zero.");
+        }
+
+        Usuario operador = usuarioRepository.findById(idOperadorCaixa)
+                .orElseThrow(() -> new IllegalArgumentException("Operador de caixa não encontrado."));
+
+        Usuario cliente = usuarioRepository.findByCpf(cpfCliente)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado."));
+
+        Carteira carteira = cliente.getCarteira();
+
+        // Adiciona o saldo
+        carteira.setSaldo(carteira.getSaldo().add(valorRecarga));
+        carteiraRepository.save(carteira);
+
+        // Gera transação de auditoria
+        Transacao transacao = Transacao.builder()
+                .carteira(carteira)
+                .valor(valorRecarga)
+                .tipo(TipoTransacao.DEPOSITO)
+                .operador(operador)
+                .build();
+
+        return transacaoRepository.save(transacao);
+    }
+
+    @Transactional
+    public Transacao reembolsar(String cpfCliente, UUID idOperadorCaixa) {
+        Usuario operador = usuarioRepository.findById(idOperadorCaixa)
+                .orElseThrow(() -> new IllegalArgumentException("Operador de caixa não encontrado."));
+
+        Usuario cliente = usuarioRepository.findByCpf(cpfCliente)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado."));
+
+        Carteira carteira = cliente.getCarteira();
+        BigDecimal saldoRestante = carteira.getSaldo();
+
+        if (saldoRestante.compareTo(BigDecimal.ZERO) == 0) {
+            throw new IllegalStateException("O cliente já possui saldo zero.");
+        }
+
+        // Zera o saldo da carteira para o reembolso
+        carteira.setSaldo(BigDecimal.ZERO);
+        carteiraRepository.save(carteira);
+
+        // Registra o débito de fechamento
+        Transacao transacao = Transacao.builder()
+                .carteira(carteira)
+                .valor(saldoRestante)
+                .tipo(TipoTransacao.REEMBOLSO)
+                .operador(operador)
+                .build();
+
+        return transacaoRepository.save(transacao);
+    }
 }

@@ -1,4 +1,4 @@
-package luna.kauan.festajuninapiraporinha.security;
+package luna.kauan.festajuninapiraporinha.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

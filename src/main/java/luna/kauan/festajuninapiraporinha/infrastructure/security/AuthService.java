@@ -1,4 +1,4 @@
-package luna.kauan.festajuninapiraporinha.service.jwt;
+package luna.kauan.festajuninapiraporinha.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
 import luna.kauan.festajuninapiraporinha.repository.UserRepository;

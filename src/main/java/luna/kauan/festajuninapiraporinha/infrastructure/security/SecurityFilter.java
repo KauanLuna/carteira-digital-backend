@@ -1,4 +1,4 @@
-package luna.kauan.festajuninapiraporinha.security;
+package luna.kauan.festajuninapiraporinha.infrastructure.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import luna.kauan.festajuninapiraporinha.domain.entity.Usuario;
 import luna.kauan.festajuninapiraporinha.repository.UserRepository;
-import luna.kauan.festajuninapiraporinha.service.jwt.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
