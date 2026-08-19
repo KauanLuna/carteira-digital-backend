@@ -22,5 +22,8 @@ public interface CarteiraRepository extends JpaRepository<Carteira, UUID> {
     @Query("SELECT c FROM Carteira c WHERE c.tokenAutorizacao = :token")
     Optional<Carteira> findByTokenAutorizacaoForUpdate(String token);
 
+    // NOVO MÉTODO: Para ser usado APENAS PARA LEITURA visual (no UsuarioController)
+    Optional<Carteira> findByTokenAutorizacao(String tokenAutorizacao);
+
     Boolean existsByTokenAutorizacao(String token);
 }

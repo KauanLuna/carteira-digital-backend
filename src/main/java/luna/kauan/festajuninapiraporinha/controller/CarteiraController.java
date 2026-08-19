@@ -20,7 +20,9 @@ public class CarteiraController {
     @GetMapping("/saldo")
     public ResponseEntity<SaldoResponse> obterSaldo() {
         // Recupera o CPF do usuário autenticado no contexto do Spring Security
-        String cpfUsuarioLogado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String cpfUsuarioLogado = usuarioLogado.getCpf();
 
         Usuario usuario = userRepository.findByCpf(cpfUsuarioLogado)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));

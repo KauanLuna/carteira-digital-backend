@@ -62,7 +62,10 @@ public class TransacaoController {
     // --- MÉTODOS AUXILIARES ---
 
     private UUID obterIdUsuarioLogado() {
-        String cpfLogado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String cpfLogado = usuarioLogado.getCpf();
+
         return userRepository.findByCpf(cpfLogado)
                 .map(Usuario::getId)
                 .orElseThrow(() -> new RuntimeException("Operador não encontrado."));

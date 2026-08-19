@@ -19,7 +19,7 @@ public class UsuarioController {
 
     @GetMapping("/buscar")
     public ResponseEntity<ClienteBuscaResponse> buscarPorToken(@RequestParam String token) {
-        Carteira carteira = carteiraRepository.findByTokenAutorizacaoForUpdate(token)
+        Carteira carteira = carteiraRepository.findByTokenAutorizacao(token)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com este token."));
 
         // Retornamos um saldo "zerado" ou dummy por questão de privacidade,

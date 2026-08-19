@@ -4,6 +4,7 @@ import luna.kauan.festajuninapiraporinha.domain.dtos.CadastroRequest;
 import luna.kauan.festajuninapiraporinha.domain.dtos.LoginRequest;
 import luna.kauan.festajuninapiraporinha.domain.dtos.TokenResponse;
 import luna.kauan.festajuninapiraporinha.domain.entity.Usuario;
+import luna.kauan.festajuninapiraporinha.repository.UserRepository;
 import luna.kauan.festajuninapiraporinha.service.UsuarioService;
 import luna.kauan.festajuninapiraporinha.infrastructure.security.TokenService;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,20 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UsuarioService usuarioService;
+    private final UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
+
         var usernamePassword = new UsernamePasswordAuthenticationToken(request.cpf(), request.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+        String cpfAutenticado = auth.getName();
+
+        Usuario usuario = userRepository.findByCpf(cpfAutenticado)
+                .orElseThrow(() -> new RuntimeException("Falha ao recuperar usuário autenticado."));
+
+        var token = tokenService.gerarToken(usuario);
 
         return ResponseEntity.ok(new TokenResponse(token));
     }
