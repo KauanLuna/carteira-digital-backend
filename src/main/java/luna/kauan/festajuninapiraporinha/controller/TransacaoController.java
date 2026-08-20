@@ -12,11 +12,10 @@ import luna.kauan.festajuninapiraporinha.repository.UserRepository;
 import luna.kauan.festajuninapiraporinha.service.TransacaoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -59,6 +58,13 @@ public class TransacaoController {
         return ResponseEntity.ok(mapearParaResponse(transacao));
     }
 
+    @GetMapping("/barraca")
+    public ResponseEntity<List<TransacaoResponse>> buscarTransacoesBarraca() {
+        UUID idOperador = obterIdUsuarioLogado();
+        List<Transacao> transacaoList = transacaoService.buscarTransacoesBarraca(idOperador);
+        return ResponseEntity.ok(mapearParaResponse(transacaoList));
+    }
+
     // --- MÉTODOS AUXILIARES ---
 
     private UUID obterIdUsuarioLogado() {
@@ -78,5 +84,20 @@ public class TransacaoController {
                 t.getTipo().name(),
                 t.getDataHora().toString()
         );
+    }
+
+    private List<TransacaoResponse> mapearParaResponse(List<Transacao> transacaoList) {
+        List<TransacaoResponse> responseList = new ArrayList<>();
+
+        for (Transacao t : transacaoList) {
+            responseList.add(
+                    new TransacaoResponse(
+                    t.getId().toString(),
+                    t.getValor(),
+                    t.getTipo().name(),
+                    t.getDataHora().toString()
+                    )
+            );
+        }
     }
 }

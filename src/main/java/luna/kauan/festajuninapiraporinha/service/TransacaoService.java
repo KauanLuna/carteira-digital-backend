@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -110,5 +111,12 @@ public class TransacaoService {
                 .build();
 
         return transacaoRepository.save(transacao);
+    }
+
+    public List<Transacao> buscarTransacoesBarraca(UUID idOperador) {
+        Usuario operador = usuarioRepository.findById(idOperador)
+                .orElseThrow(() -> new IllegalArgumentException("Operador da barraca não encontrado."));
+
+        return transacaoRepository.findByOperador(operador);
     }
 }
