@@ -99,5 +99,7 @@ public class TransacaoController {
                     )
             );
         }
+
+        return responseList;
     }
 }
