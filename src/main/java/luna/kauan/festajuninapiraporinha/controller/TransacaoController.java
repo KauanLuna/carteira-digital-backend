@@ -82,7 +82,7 @@ public class TransacaoController {
                 t.getId().toString(),
                 t.getValor(),
                 t.getTipo().name(),
-                t.getDataHora().toString()
+                t.getDataHora()
         );
     }
 
@@ -95,7 +95,7 @@ public class TransacaoController {
                     t.getId().toString(),
                     t.getValor(),
                     t.getTipo().name(),
-                    t.getDataHora().toString()
+                    t.getDataHora()
                     )
             );
         }
