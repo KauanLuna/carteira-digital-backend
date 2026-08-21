@@ -26,4 +26,6 @@ public interface CarteiraRepository extends JpaRepository<Carteira, UUID> {
     Optional<Carteira> findByTokenAutorizacao(String tokenAutorizacao);
 
     Boolean existsByTokenAutorizacao(String token);
+
+    Carteira findByUsuario_Cpf(String cpf);
 }
