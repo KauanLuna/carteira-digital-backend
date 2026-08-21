@@ -131,6 +131,6 @@ public class TransacaoService {
         Usuario operador = usuarioRepository.findById(idOperador)
                 .orElseThrow(() -> new IllegalArgumentException("Operador não encontrado."));
 
-        return transacaoRepository.findByOperador(operador);
+        return transacaoRepository.findByCarteira_Id(operador.getCarteira().getId());
     }
 }

@@ -92,11 +92,21 @@ public class TransacaoController {
     }
 
     private TransacaoResponse mapearParaResponse(Transacao t) {
+        String nomeCliente = (t.getCarteira() != null && t.getCarteira().getUsuario() != null)
+                ? t.getCarteira().getUsuario().getNome()
+                : "Cliente";
+
+        String nomeOperador = t.getOperador() != null
+                ? t.getOperador().getNome()
+                : "Operador";
+
         return new TransacaoResponse(
                 t.getId().toString(),
                 t.getValor(),
                 t.getTipo().name(),
-                t.getDataHora()
+                t.getDataHora(),
+                nomeCliente,
+                nomeOperador
         );
     }
 
@@ -104,12 +114,22 @@ public class TransacaoController {
         List<TransacaoResponse> responseList = new ArrayList<>();
 
         for (Transacao t : transacaoList) {
+            String nomeCliente = (t.getCarteira() != null && t.getCarteira().getUsuario() != null)
+                    ? t.getCarteira().getUsuario().getNome()
+                    : "Cliente";
+
+            String nomeOperador = t.getOperador() != null
+                    ? t.getOperador().getNome()
+                    : "Operador";
+
             responseList.add(
                     new TransacaoResponse(
-                    t.getId().toString(),
-                    t.getValor(),
-                    t.getTipo().name(),
-                    t.getDataHora()
+                            t.getId().toString(),
+                            t.getValor(),
+                            t.getTipo().name(),
+                            t.getDataHora(),
+                            nomeCliente,
+                            nomeOperador
                     )
             );
         }

@@ -11,4 +11,6 @@ import java.util.UUID;
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, UUID> {
     List<Transacao> findByOperador(Usuario operador);
+
+    List<Transacao> findByCarteira_Id(UUID id);
 }
