@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/transacoes/convidado").hasRole("CLIENTE")
 
                         // 3. Permissões de BARRACA (Cobrança)
-                        .requestMatchers(HttpMethod.GET, "/usuarios/buscar").hasAnyRole("BARRACA", "CAIXA")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/buscar/**").hasAnyRole("BARRACA", "CAIXA")
                         .requestMatchers(HttpMethod.POST, "/transacoes/debitar").hasAnyRole("BARRACA", "CAIXA")
                         .requestMatchers(HttpMethod.GET, "/transacoes/barraca").hasRole("BARRACA")
 

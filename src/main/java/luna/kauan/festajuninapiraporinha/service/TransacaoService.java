@@ -127,10 +127,10 @@ public class TransacaoService {
         return transacaoRepository.findByOperador(operador);
     }
 
-    public List<Transacao> buscarTransacoesConvidado(UUID idOperador) {
-        Usuario operador = usuarioRepository.findById(idOperador)
+    public List<Transacao> buscarTransacoesConvidado(UUID idConvidado) {
+        Usuario convidado = usuarioRepository.findById(idConvidado)
                 .orElseThrow(() -> new IllegalArgumentException("Operador não encontrado."));
 
-        return transacaoRepository.findByCarteira_Id(operador.getCarteira().getId());
+        return transacaoRepository.findByCarteira_Id(convidado.getCarteira().getId());
     }
 }

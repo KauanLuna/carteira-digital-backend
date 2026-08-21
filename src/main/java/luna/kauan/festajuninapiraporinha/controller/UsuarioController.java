@@ -17,7 +17,7 @@ public class UsuarioController {
 
     private final CarteiraRepository carteiraRepository;
 
-    @GetMapping("/buscar")
+    @GetMapping("/buscar/cpf")
     public ResponseEntity<ClienteBuscaResponse> buscarPorCpf(@RequestParam String cpf) {
         Carteira carteira = carteiraRepository.findByUsuario_Cpf(cpf);
 
@@ -25,11 +25,21 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
 
-        // Retornamos um saldo "zerado" ou dummy por questão de privacidade,
-        // a barraca não precisa saber quanto dinheiro o cliente tem, apenas debitar.
         return ResponseEntity.ok(new ClienteBuscaResponse(
                 carteira.getUsuario().getNome(),
-                "***.***.***-**", // Ocultamos o CPF na tela da barraca
+                "***.***.***-**",
+                null
+        ));
+    }
+
+    @GetMapping("/buscar/token")
+    public ResponseEntity<ClienteBuscaResponse> buscarPorToken(@RequestParam String token) {
+        Carteira carteira = carteiraRepository.findByTokenAutorizacao(token)
+                .orElseThrow(() -> new RuntimeException("Carteira não encontrada com esse token"));
+
+        return ResponseEntity.ok(new ClienteBuscaResponse(
+                carteira.getUsuario().getNome(),
+                "***.***.***-**",
                 null
         ));
     }
