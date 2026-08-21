@@ -65,6 +65,20 @@ public class TransacaoController {
         return ResponseEntity.ok(mapearParaResponse(transacaoList));
     }
 
+    @GetMapping("/caixa")
+    public ResponseEntity<List<TransacaoResponse>> buscarTransacoesCaixa() {
+        UUID idOperador = obterIdUsuarioLogado();
+        List<Transacao> transacaoList = transacaoService.buscarTransacoesCaixa(idOperador);
+        return ResponseEntity.ok(mapearParaResponse(transacaoList));
+    }
+
+    @GetMapping("/convidado")
+    public ResponseEntity<List<TransacaoResponse>> buscarTransacoesConvidado() {
+        UUID idOperador = obterIdUsuarioLogado();
+        List<Transacao> transacaoList = transacaoService.buscarTransacoesConvidado(idOperador);
+        return ResponseEntity.ok(mapearParaResponse(transacaoList));
+    }
+
     // --- MÉTODOS AUXILIARES ---
 
     private UUID obterIdUsuarioLogado() {

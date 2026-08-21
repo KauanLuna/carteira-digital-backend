@@ -119,4 +119,18 @@ public class TransacaoService {
 
         return transacaoRepository.findByOperador(operador);
     }
+
+    public List<Transacao> buscarTransacoesCaixa(UUID idOperador) {
+        Usuario operador = usuarioRepository.findById(idOperador)
+                .orElseThrow(() -> new IllegalArgumentException("Operador de caixa não encontrado."));
+
+        return transacaoRepository.findByOperador(operador);
+    }
+
+    public List<Transacao> buscarTransacoesConvidado(UUID idOperador) {
+        Usuario operador = usuarioRepository.findById(idOperador)
+                .orElseThrow(() -> new IllegalArgumentException("Operador não encontrado."));
+
+        return transacaoRepository.findByOperador(operador);
+    }
 }

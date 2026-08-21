@@ -38,15 +38,18 @@ public class SecurityConfig {
                         // 2. Permissões de CLIENTE (Consulta de Saldo e Transações)
                         .requestMatchers(HttpMethod.GET, "/carteira/saldo").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/transacoes/minhas").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/transacoes/convidado").hasRole("CLIENTE")
 
                         // 3. Permissões de BARRACA (Cobrança)
                         .requestMatchers(HttpMethod.GET, "/usuarios/buscar").hasAnyRole("BARRACA", "CAIXA")
                         .requestMatchers(HttpMethod.POST, "/transacoes/debitar").hasAnyRole("BARRACA", "CAIXA")
                         .requestMatchers(HttpMethod.GET, "/transacoes/barraca").hasRole("BARRACA")
 
+
                         // 4. Permissões de CAIXA (Depósito e Reembolso)
                         .requestMatchers(HttpMethod.POST, "/transacoes/depositar").hasRole("CAIXA")
                         .requestMatchers(HttpMethod.POST, "/transacoes/reembolsar").hasRole("CAIXA")
+                        .requestMatchers(HttpMethod.GET, "/transacoes/caixa").hasRole("CAIXA")
 
                         .anyRequest().authenticated()
                 )
