@@ -69,6 +69,16 @@ public class UsuarioService {
                 .role(role)
                 .build();
 
+        // Gera a carteira e o token de 6 dígitos para o operador também
+        String token = gerarTokenUnico();
+        Carteira carteira = Carteira.builder()
+                .saldo(BigDecimal.ZERO)
+                .usuario(operador)
+                .tokenAutorizacao(token)
+                .build();
+
+        operador.setCarteira(carteira);
+
         return userRepository.save(operador);
     }
 
