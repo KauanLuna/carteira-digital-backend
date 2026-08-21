@@ -56,6 +56,22 @@ public class UsuarioService {
         return userRepository.save(usuario);
     }
 
+    @Transactional
+    public Usuario cadastrarOperador(String nome, String cpf, String senha, Role role) {
+        if (userRepository.findByCpf(cpf).isPresent()) {
+            throw new IllegalArgumentException("CPF já cadastrado em nosso sistema.");
+        }
+
+        Usuario operador = Usuario.builder()
+                .nome(nome)
+                .cpf(cpf)
+                .senha(passwordEncoder.encode(senha))
+                .role(role)
+                .build();
+
+        return userRepository.save(operador);
+    }
+
     /**
      * Gera um token numérico de exatos 6 dígitos (100000 a 999999).
      * Garante unicidade checando contra o banco de dados.

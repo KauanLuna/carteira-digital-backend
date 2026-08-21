@@ -26,6 +26,18 @@ public class DataSeeder {
                 userRepository.save(caixaAdmin);
                 System.out.println("✅ Usuário CAIXA PRINCIPAL gerado com sucesso! CPF: 00000000000 / Senha: 123456");
             }
+
+            if (userRepository.findByCpf("99999999999").isEmpty()) {
+                Usuario admin = Usuario.builder()
+                        .nome("Administrador")
+                        .cpf("99999999999")
+                        .senha(passwordEncoder.encode("admin123")) // Senha de administrador
+                        .role(Role.ROLE_ADMIN)
+                        .build();
+
+                userRepository.save(admin);
+                System.out.println("Admin Criado com sucesso!");
+            }
         };
     }
 }

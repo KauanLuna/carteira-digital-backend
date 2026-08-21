@@ -51,6 +51,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/transacoes/reembolsar").hasRole("CAIXA")
                         .requestMatchers(HttpMethod.GET, "/transacoes/caixa").hasRole("CAIXA")
 
+                        // 5. Permissões de ADMIN (Criação de BARRACAS e CAIXAS)
+                        .requestMatchers(HttpMethod.POST, "/admin/barracas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/admin/caixas").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
