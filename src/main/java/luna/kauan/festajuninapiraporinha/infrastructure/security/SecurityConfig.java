@@ -37,7 +37,7 @@ public class SecurityConfig {
 
                         // 2. Permissões de CLIENTE (Consulta de Saldo e Transações)
                         .requestMatchers(HttpMethod.GET, "/carteira/saldo").hasAnyRole("CLIENTE", "BARRACA", "CAIXA")
-                        .requestMatchers(HttpMethod.GET, "/transacoes/convidado").hasAnyRole("CLIENTE", "BARRACA", "CAIXA")
+                                   .requestMatchers(HttpMethod.GET, "/transacoes/convidado").hasAnyRole("CLIENTE", "BARRACA", "CAIXA")
                         .requestMatchers(HttpMethod.GET, "/carteira/saldo/reembolso").hasRole("CAIXA")
 
                         // 3. Permissões de BARRACA (Cobrança)

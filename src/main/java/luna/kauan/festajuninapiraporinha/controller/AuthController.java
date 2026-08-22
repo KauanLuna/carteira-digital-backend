@@ -37,7 +37,7 @@ public class AuthController {
 
         var token = tokenService.gerarToken(usuario);
 
-        return ResponseEntity.ok(new TokenResponse(token));
+        return ResponseEntity.ok(new TokenResponse(token, usuario.getNome()));
     }
 
     @PostMapping("/cadastrar")
