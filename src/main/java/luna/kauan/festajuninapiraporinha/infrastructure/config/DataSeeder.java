@@ -38,6 +38,18 @@ public class DataSeeder {
                 userRepository.save(admin);
                 System.out.println("Admin Criado com sucesso!");
             }
+
+            if (userRepository.findByCpf("11111111111").isEmpty()) {
+                Usuario operador = Usuario.builder()
+                        .nome("Barraca Teste")
+                        .cpf("11111111111")
+                        .senha(passwordEncoder.encode("barracaTeste")) // Senha de operador
+                        .role(Role.ROLE_BARRACA)
+                        .build();
+
+                userRepository.save(operador);
+                System.out.println("Barraca Criada com sucesso!");
+            }
         };
     }
 }

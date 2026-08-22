@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -117,20 +118,30 @@ public class TransacaoService {
         Usuario operador = usuarioRepository.findById(idOperador)
                 .orElseThrow(() -> new IllegalArgumentException("Operador da barraca não encontrado."));
 
-        return transacaoRepository.findByOperador(operador);
+        List<Transacao> transacoes = transacaoRepository.findByOperador(operador);
+        transacoes.sort(Comparator.comparing(Transacao::getDataHora).reversed());
+
+        return transacoes;
     }
 
     public List<Transacao> buscarTransacoesCaixa(UUID idOperador) {
         Usuario operador = usuarioRepository.findById(idOperador)
                 .orElseThrow(() -> new IllegalArgumentException("Operador de caixa não encontrado."));
 
-        return transacaoRepository.findByOperador(operador);
+        List<Transacao> transacoes = transacaoRepository.findByOperador(operador);
+
+        transacoes.sort(Comparator.comparing(Transacao::getDataHora).reversed());
+
+        return transacoes;
     }
 
     public List<Transacao> buscarTransacoesConvidado(UUID idConvidado) {
         Usuario convidado = usuarioRepository.findById(idConvidado)
                 .orElseThrow(() -> new IllegalArgumentException("Operador não encontrado."));
 
-        return transacaoRepository.findByCarteira_Id(convidado.getCarteira().getId());
+        List<Transacao> transacoes = transacaoRepository.findByCarteira_Id(convidado.getCarteira().getId());
+        transacoes.sort(Comparator.comparing(Transacao::getDataHora).reversed());
+
+        return transacoes;
     }
 }
