@@ -1,6 +1,7 @@
 package luna.kauan.festajuninapiraporinha.controller;
 
 import luna.kauan.festajuninapiraporinha.domain.dtos.CadastroRequest;
+import luna.kauan.festajuninapiraporinha.domain.dtos.LoginBarracaRequest;
 import luna.kauan.festajuninapiraporinha.domain.dtos.LoginRequest;
 import luna.kauan.festajuninapiraporinha.domain.dtos.TokenResponse;
 import luna.kauan.festajuninapiraporinha.domain.entity.Usuario;
@@ -34,6 +35,26 @@ public class AuthController {
 
         Usuario usuario = userRepository.findByCpf(cpfAutenticado)
                 .orElseThrow(() -> new RuntimeException("Falha ao recuperar usuário autenticado."));
+
+        var token = tokenService.gerarToken(usuario);
+
+        return ResponseEntity.ok(new TokenResponse(token, usuario.getNome()));
+    }
+
+    @PostMapping("/login/barraca")
+    public ResponseEntity<TokenResponse> loginBarraca(@RequestBody LoginBarracaRequest request) {
+
+        var usernamePassword = new UsernamePasswordAuthenticationToken(request.nome(), request.senha());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        Usuario usuarioAutenticado = (Usuario) auth.getPrincipal();
+        String nomeAutenticado = usuarioAutenticado.getNome();
+
+        Usuario usuario = userRepository.findByNome(nomeAutenticado);
+
+        if (usuario == null) {
+            throw new RuntimeException("Falha ao recuperar usuário autenticado.");
+        }
 
         var token = tokenService.gerarToken(usuario);
 

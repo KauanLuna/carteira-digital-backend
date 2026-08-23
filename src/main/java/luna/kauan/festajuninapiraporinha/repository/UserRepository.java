@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<Usuario, UUID> {
     Optional<Usuario> findByCpf(String cpf);
+
+    Usuario findByNome(String nome);
 }
