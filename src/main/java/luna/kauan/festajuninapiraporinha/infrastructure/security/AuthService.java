@@ -1,6 +1,7 @@
 package luna.kauan.festajuninapiraporinha.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
+import luna.kauan.festajuninapiraporinha.domain.entity.Usuario;
 import luna.kauan.festajuninapiraporinha.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -22,7 +23,7 @@ public class AuthService implements UserDetailsService {
         // Tenta localizar pelo CPF primeiro; se não achar, tenta pelo nome (para login de barracas)
         var usuarioOpt = userRepository.findByCpf(cpfOrNome);
 
-        luna.kauan.festajuninapiraporinha.domain.entity.Usuario usuario;
+        Usuario usuario;
 
         if (usuarioOpt.isPresent()) {
             usuario = usuarioOpt.get();
