@@ -47,11 +47,17 @@ public class AuthController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(request.nome(), request.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        // O UserDetailsService retorna um User com username = CPF; usar auth.getName() para obter o CPF autenticado
-        String cpfAutenticado = auth.getName();
+        // O UserDetailsService retorna um username que pode ser CPF ou nome; usar auth.getName() e buscar por CPF primeiro, depois por nome
+        String principalName = auth.getName();
 
-        Usuario usuario = userRepository.findByCpf(cpfAutenticado)
-                .orElseThrow(() -> new RuntimeException("Falha ao recuperar usuário autenticado."));
+        Usuario usuario = userRepository.findByCpf(principalName).orElse(null);
+        if (usuario == null) {
+            usuario = userRepository.findByNome(principalName);
+        }
+
+        if (usuario == null) {
+            throw new RuntimeException("Falha ao recuperar usuário autenticado.");
+        }
 
         var token = tokenService.gerarToken(usuario);
 

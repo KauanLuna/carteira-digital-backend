@@ -34,8 +34,11 @@ public class AuthService implements UserDetailsService {
             }
         }
 
+        // O username usado pelo UserDetails não pode ser nulo. Usar CPF quando disponível, senão o nome.
+        String username = (usuario.getCpf() != null && !usuario.getCpf().isBlank()) ? usuario.getCpf() : usuario.getNome();
+
         return new User(
-                usuario.getCpf(),
+                username,
                 usuario.getSenha(),
                 List.of(new SimpleGrantedAuthority(usuario.getRole().name()))
         );

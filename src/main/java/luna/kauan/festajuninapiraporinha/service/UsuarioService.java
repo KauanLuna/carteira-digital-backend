@@ -57,7 +57,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario cadastrarOperador(String nome, String cpf, String senha, Role role) {
+    public Usuario cadastrarCaixa(String nome, String cpf, String senha, Role role) {
         if (userRepository.findByCpf(cpf).isPresent()) {
             throw new IllegalArgumentException("CPF já cadastrado em nosso sistema.");
         }
@@ -78,6 +78,21 @@ public class UsuarioService {
                 .build();
 
         operador.setCarteira(carteira);
+
+        return userRepository.save(operador);
+    }
+
+    @Transactional
+    public Usuario cadastrarBarraca(String nome, String senha, Role role) {
+        if (userRepository.findByNomeAndRole(nome, role).isPresent()) {
+            throw new IllegalArgumentException("Barraca já cadastrada em nosso sistema.");
+        }
+
+        Usuario operador = Usuario.builder()
+                .nome(nome)
+                .senha(passwordEncoder.encode(senha))
+                .role(role)
+                .build();
 
         return userRepository.save(operador);
     }

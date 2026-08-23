@@ -21,13 +21,13 @@ public class AdminController {
 
     @PostMapping("/barracas")
     public ResponseEntity<Void> createStall(@RequestBody CreateStallRequest request) {
-        usuarioService.cadastrarOperador(request.stallName(), request.responsibleCpf(), request.password(), Role.ROLE_BARRACA);
+        usuarioService.cadastrarBarraca(request.stallName(), request.password(), Role.ROLE_BARRACA);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/caixas")
     public ResponseEntity<Void> createCashier(@RequestBody CreateCashierRequest request) {
-        usuarioService.cadastrarOperador(request.cashierId(), request.operatorCpf(), request.password(), Role.ROLE_CAIXA);
+        usuarioService.cadastrarCaixa(request.cashierId(), request.operatorCpf(), request.password(), Role.ROLE_CAIXA);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
