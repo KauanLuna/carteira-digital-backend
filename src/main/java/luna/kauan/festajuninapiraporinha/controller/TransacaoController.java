@@ -86,6 +86,12 @@ public class TransacaoController {
 
         String cpfLogado = usuarioLogado.getCpf();
 
+        if (cpfLogado == null) {
+            return userRepository.findByNomeAndRole(usuarioLogado.getNome(), usuarioLogado.getRole())
+                    .map(Usuario::getId)
+                    .orElseThrow(() -> new RuntimeException("Operador não encontrado."));
+        }
+
         return userRepository.findByCpf(cpfLogado)
                 .map(Usuario::getId)
                 .orElseThrow(() -> new RuntimeException("Operador não encontrado."));

@@ -59,7 +59,7 @@ public class AuthController {
             throw new RuntimeException("Falha ao recuperar usuário autenticado.");
         }
 
-        var token = tokenService.gerarToken(usuario);
+        var token = tokenService.gerarTokenBarraca(usuario);
 
         return ResponseEntity.ok(new TokenResponse(token, usuario.getNome()));
     }
