@@ -33,6 +33,20 @@ public class TokenService {
         }
     }
 
+    public String gerarTokenBarraca(Usuario usuario) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.create()
+                    .withIssuer("carteira-julhina-api")
+                    .withSubject(usuario.getNome()) // Usamos o CPF como chave de identificação
+                    .withClaim("role", usuario.getRole().name()) // Embutimos a Role no token para facilitar o frontend
+                    .withExpiresAt(gerarDataExpiracao())
+                    .sign(algorithm);
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("Erro ao gerar token JWT", exception);
+        }
+    }
+
     public String validarToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

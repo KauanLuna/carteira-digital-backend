@@ -1,6 +1,7 @@
 package luna.kauan.festajuninapiraporinha.controller;
 
 import luna.kauan.festajuninapiraporinha.domain.dtos.CadastroRequest;
+import luna.kauan.festajuninapiraporinha.domain.dtos.LoginBarracaRequest;
 import luna.kauan.festajuninapiraporinha.domain.dtos.LoginRequest;
 import luna.kauan.festajuninapiraporinha.domain.dtos.TokenResponse;
 import luna.kauan.festajuninapiraporinha.domain.entity.Usuario;
@@ -36,6 +37,29 @@ public class AuthController {
                 .orElseThrow(() -> new RuntimeException("Falha ao recuperar usuário autenticado."));
 
         var token = tokenService.gerarToken(usuario);
+
+        return ResponseEntity.ok(new TokenResponse(token, usuario.getNome()));
+    }
+
+    @PostMapping("/login/barraca")
+    public ResponseEntity<TokenResponse> loginBarraca(@RequestBody LoginBarracaRequest request) {
+
+        var usernamePassword = new UsernamePasswordAuthenticationToken(request.nome(), request.senha());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        // O UserDetailsService retorna um username que pode ser CPF ou nome; usar auth.getName() e buscar por CPF primeiro, depois por nome
+        String principalName = auth.getName();
+
+        Usuario usuario = userRepository.findByCpf(principalName).orElse(null);
+        if (usuario == null) {
+            usuario = userRepository.findByNome(principalName);
+        }
+
+        if (usuario == null) {
+            throw new RuntimeException("Falha ao recuperar usuário autenticado.");
+        }
+
+        var token = tokenService.gerarTokenBarraca(usuario);
 
         return ResponseEntity.ok(new TokenResponse(token, usuario.getNome()));
     }

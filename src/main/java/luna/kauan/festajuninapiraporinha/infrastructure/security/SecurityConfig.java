@@ -33,6 +33,7 @@ public class SecurityConfig {
 
                         // 1. Endpoints Públicos
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login/barraca").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/cadastrar").permitAll()
 
                         // 2. Permissões de CLIENTE (Consulta de Saldo e Transações)

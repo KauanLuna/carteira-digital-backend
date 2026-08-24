@@ -28,11 +28,18 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = recuperarToken(request);
 
         if (token != null) {
-            var cpfSubject = tokenService.validarToken(token);
+            var subject = tokenService.validarToken(token);
 
-            if (!cpfSubject.isEmpty()) {
-                Usuario usuario = userRepository.findByCpf(cpfSubject)
-                        .orElseThrow(() -> new RuntimeException("Usuário não encontrado na validação do token"));
+            if (!subject.isEmpty()) {
+                Usuario usuario = userRepository.findByCpf(subject).orElse(null);
+
+                if (usuario == null) {
+                    usuario = userRepository.findByNome(subject);
+                }
+
+                if (usuario == null) {
+                    throw new RuntimeException("Usuário não encontrado na validação do token");
+                }
 
                 // Mapeia a Role do usuário para o formato que o Spring Security entende
                 var authorities = List.of(new SimpleGrantedAuthority(usuario.getRole().name()));
